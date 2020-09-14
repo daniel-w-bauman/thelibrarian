@@ -34,6 +34,7 @@ class Signup extends React.Component {
 
   signup = (e) => {
     e.preventDefault();
+    let clear = false;
     if(this.state.firstname !== '' && this.state.lastname !== '' && this.state.email !== '' && this.state.password !== ''){
       let data = {};
       data['firstname'] = this.state.firstname;
@@ -41,10 +42,12 @@ class Signup extends React.Component {
       data['email'] = this.state.email;
       data['password'] = this.state.password;
       axios.post('http://localhost:3001/api/createuser', data).then(function(response){
+        console.log(response);
         if(response.data.status === '1'){
-          console.log(response.data.error);
+          alert(response.data.message);
         } else if(response.data.status === '0'){
-          console.log(response.data.message);
+          alert(response.data.message);
+          clear = true;
         } else {
           alert('error contacting server');
         }
@@ -54,7 +57,11 @@ class Signup extends React.Component {
     } else {
       alert("Not all fields are filled.");
     }
+    if(clear){
+      this.setState({firstname: '', lastname: '', email: '', password: ''});
+    }
   }
+
 
   render(){
     return (
